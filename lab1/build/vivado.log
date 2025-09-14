@@ -1,0 +1,103 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Sun Sep 14 11:52:55 2025
+# Process ID         : 3886
+# Current directory  : /home/wang/fpga_labs_fa22-master/lab1/build
+# Command line       : vivado
+# Log file           : /home/wang/fpga_labs_fa22-master/lab1/build/vivado.log
+# Journal file       : /home/wang/fpga_labs_fa22-master/lab1/build/vivado.jou
+# Running On         : wang
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.2 LTS
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 155H
+# CPU Frequency      : 2995.198 MHz
+# CPU Physical cores : 11
+# CPU Logical cores  : 22
+# Host memory        : 16565 MB
+# Swap memory        : 4294 MB
+# Total Virtual      : 20860 MB
+# Available Virtual  : 19343 MB
+#-----------------------------------------------------------
+start_gui
+open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/synth/z1top.dcp
+Command: open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/synth/z1top.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.04 . Memory (MB): peak = 7430.430 ; gain = 0.000 ; free physical = 12680 ; free virtual = 17858
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/wang/Vivado/Vivado/2024.2/data/ip'.
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7684.680 ; gain = 0.000 ; free physical = 12400 ; free virtual = 17622
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7745.367 ; gain = 0.000 ; free physical = 12308 ; free virtual = 17544
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Constraints 18-5170] The checkpoint was created with non-default parameter values which do not match the current Vivado settings.  Mismatching parameters are:
+  general.maxThreads
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8199.102 ; gain = 0.000 ; free physical = 11838 ; free virtual = 17096
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 8199.102 ; gain = 0.000 ; free physical = 11838 ; free virtual = 17096
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8199.102 ; gain = 0.000 ; free physical = 11838 ; free virtual = 17096
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8199.102 ; gain = 0.000 ; free physical = 11838 ; free virtual = 17096
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 8239.121 ; gain = 40.020 ; free physical = 11838 ; free virtual = 17096
+Read Physdb Files: Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 8239.121 ; gain = 40.020 ; free physical = 11838 ; free virtual = 17096
+Restored from archive | CPU: 0.050000 secs | Memory: 1.099174 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 8239.121 ; gain = 40.020 ; free physical = 11838 ; free virtual = 17096
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8239.121 ; gain = 0.000 ; free physical = 11837 ; free virtual = 17096
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2024.2 (64-bit) build 5239630
+open_checkpoint: Time (s): cpu = 00:00:28 ; elapsed = 00:00:19 . Memory (MB): peak = 8619.758 ; gain = 1201.234 ; free physical = 11484 ; free virtual = 16748
+close_project
+open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/impl/z1top_routed.dcp
+Command: open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/impl/z1top_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11415 ; free virtual = 16705
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/wang/Vivado/Vivado/2024.2/data/ip'.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11415 ; free virtual = 16705
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11414 ; free virtual = 16704
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Constraints 18-5170] The checkpoint was created with non-default parameter values which do not match the current Vivado settings.  Mismatching parameters are:
+  general.maxThreads
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Read Physdb Files: Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Restored from archive | CPU: 0.020000 secs | Memory: 0.037231 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 8622.762 ; gain = 0.000 ; free physical = 11408 ; free virtual = 16697
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2024.2 (64-bit) build 5239630
+open_checkpoint: Time (s): cpu = 00:00:08 ; elapsed = 00:00:06 . Memory (MB): peak = 8689.527 ; gain = 66.766 ; free physical = 11371 ; free virtual = 16661
+show_objects -name AND [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ IO.*.* } ]
+exit
+INFO: [Common 17-206] Exiting Vivado at Sun Sep 14 12:10:29 2025...

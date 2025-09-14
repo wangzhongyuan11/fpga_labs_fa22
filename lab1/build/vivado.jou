@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Sun Sep 14 11:52:55 2025
+# Process ID         : 3886
+# Current directory  : /home/wang/fpga_labs_fa22-master/lab1/build
+# Command line       : vivado
+# Log file           : /home/wang/fpga_labs_fa22-master/lab1/build/vivado.log
+# Journal file       : /home/wang/fpga_labs_fa22-master/lab1/build/vivado.jou
+# Running On         : wang
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.2 LTS
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 155H
+# CPU Frequency      : 2995.198 MHz
+# CPU Physical cores : 11
+# CPU Logical cores  : 22
+# Host memory        : 16565 MB
+# Swap memory        : 4294 MB
+# Total Virtual      : 20860 MB
+# Available Virtual  : 19343 MB
+#-----------------------------------------------------------
+start_gui
+open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/synth/z1top.dcp
+close_project
+open_checkpoint /home/wang/fpga_labs_fa22-master/lab1/build/impl/z1top_routed.dcp
+show_objects -name AND [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ IO.*.* } ]
