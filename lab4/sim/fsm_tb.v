@@ -2,7 +2,7 @@
 `define CLK_PERIOD 8
 
 module fsm_tb();
-    // Generate 125 Mhz clock
+    // Generate 125 MHz clock
     reg clk = 0;
     always #(`CLK_PERIOD/2) clk = ~clk;
 
@@ -13,7 +13,7 @@ module fsm_tb();
     wire [3:0] leds;
     wire [1:0] leds_state;
 
-    fsm #(.CYCLES_PER_SECOND(125_000_000)) DUT (
+    fsm #(.CYCLES_PER_SECOND(1)) DUT (
         .clk(clk),
         .rst(rst),
         .buttons(buttons),
@@ -37,9 +37,64 @@ module fsm_tb();
 
         buttons = 0;
 
-        // TODO: toggle the buttons
-        // verify state transitions with the LEDs
-        // verify fcw is being set properly by the FSM
+        // TODO: Toggle the buttons
+        // Verify state transitions with the LEDs
+        // Verify fcw is being set properly by the FSM
+
+        //press buttons[1] to transit into reverse state
+        buttons[1] = 1; 
+        @(posedge clk); #1;
+        buttons[1] = 0;
+        #32;
+        assert(leds_state == 2'b01) else $error("leds_state should be 01");
+      #1250;
+        //assert(fcw == 67934) else $error("fcw should be 67934");
+
+
+        //press buttons[0] to transit into pause state
+        buttons[0] = 1; 
+        @(posedge clk); #1;
+        buttons[0] = 0;
+        #32;
+        assert(leds_state == 2'b10) else $error("leds_state should be 10");
+        assert(fcw == 0) else $error("fcw should be 0");
+
+
+        //press buttons[2] to transit into edit state
+        buttons[2] = 1; 
+        @(posedge clk); #1;
+        buttons[2] = 0;
+        #64;
+        assert(leds_state == 2'b11) else $error("leds_state should be 11");
+        //assert(fcw == 67934) else $error("fcw should be 67934");
+
+        //increase frequency
+        repeat (2) begin
+            buttons[0] = 1; 
+            @(posedge clk); #8;
+            buttons[0] = 0;
+            #32;
+        end
+       // assert(fcw == 69934) else $error("fcw should be 69934");
+        assert(leds_state == 2'b11) else $error("leds_state should be 11");
+
+        //back to regular play
+        buttons[2] = 1; 
+        @(posedge clk); #8;
+        buttons[2] = 0; #8;
+        buttons[0] = 1; 
+        @(posedge clk); #8;
+        buttons[0] = 0;
+        #64;
+        //assert(fcw == 69934) else $error("fcw should be 69934");
+
+        rst = 1;  // Trigger reset
+        @(posedge clk); #8;  // Wait for one clock cycle
+        rst = 0;
+        #64;
+        assert(leds_state == 2'b00) else $error("leds_state should be 01");
+        // $display("leds is %b", leds_state);
+
 
         `ifndef IVERILOG
             $vcdplusoff;

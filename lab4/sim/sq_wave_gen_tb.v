@@ -8,7 +8,7 @@ module sq_wave_gen_tb();
 
     // I/O
     wire [9:0] code;
-    reg [2:0] buttons;
+    reg [2:0] buttons=3'b000;
     wire [3:0] leds;
     reg next_sample;
     reg rst;
@@ -61,11 +61,44 @@ module sq_wave_gen_tb();
                 // TODO: play with the buttons to adjust the output frequency
                 // hint: use the num_samples_fetched integer to wait for
                 // X samples to be fetched by the sampling thread, example below
-                @(num_samples_fetched == 500);
-                $display("Fetched 500 samples at time %t", $time);
-                @(num_samples_fetched == 5000);
+
+                buttons <= 'b0;
+                
+                buttons[1] = 1'b1;
+                @(num_samples_fetched == 10000);
                 $display("Fetched 5000 samples at time %t", $time);
+                buttons [1] = 1'b0;
+                @(num_samples_fetched == 15000);
+                $display("Fetched 5000 samples at time %t", $time);
+
+                buttons[0] = 1'b1;
+                @(num_samples_fetched == 20000);
+                $display("Fetched 5000 samples at time %t", $time);
+                buttons [0] = 1'b0;
+                @(num_samples_fetched == 25000);
+                $display("Fetched 5000 samp
+                les at time %t", $time);
+
+                buttons[2] = 1'b1;
+                @(num_samples_fetched == 30000);
+                $display("Fetched 5000 samples at time %t", $time);
+
+                buttons[1] = 1'b1;
+                @(num_samples_fetched == 35000);
+                $display("Fetched 5000 samples at time %t", $time);
+                buttons [1] = 1'b0;
+                @(num_samples_fetched == 40000);
+                $display("Fetched 5000 samples at time %t", $time);
+
+                buttons[0] = 1'b1;
+                @(num_samples_fetched == 45000);
+                $display("Fetched 5000 samples at time %t", $time);
+                buttons [0] = 1'b0;
+                @(num_samples_fetched == 50000);
+                $display("Fetched 5000 samples at time %t", $time);
+
             end
+
         join
 
         $fclose(code_file);
@@ -73,6 +106,7 @@ module sq_wave_gen_tb();
         `ifndef IVERILOG
             $vcdplusoff;
         `endif
+
         $finish();
     end
 endmodule

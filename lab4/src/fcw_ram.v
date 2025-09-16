@@ -11,10 +11,10 @@ module fcw_ram(
 
     always @(posedge clk) begin
         if (rst) begin
-            ram[0] <= 24'd0; // replace the RAM reset values with the values you computed
-            ram[1] <= 24'd0;
-            ram[2] <= 24'd0;
-            ram[3] <= 24'd0;
+            ram[0] <= 24'h00EC3C; // 440 Hz
+            ram[1] <= 24'h010905; // 494 Hz
+            ram[2] <= 24'h01194B; // 523 Hz
+            ram[3] <= 24'h013BCD; // 587 Hz
         end
         else if (wr_en)
             ram[addr] <= d_in;

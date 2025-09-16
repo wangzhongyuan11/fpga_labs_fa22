@@ -1,32 +1,62 @@
 module sq_wave_gen #(
-    parameter STEP = 10
+    parameter STEP = 12'd10
 )(
     input clk,
     input rst,
     input next_sample,
     input [2:0] buttons,
-    output [9:0] code,
+    output reg [9:0] code,
     output [3:0] leds
 );
-    localparam high_low_switch_COUNT = 139;
-    localparam HIGH_S = 1;
-    localparam HIGH_CODE = 562;
-    localparam LOW_S = 0;
-    localparam LOW_CODE = 462;
-    reg [$clog2(high_low_switch_COUNT)-1:0] dac_next_sample_cnt = 0;
-    reg code_state_r = LOW_S;
+    localparam HIGH_VALUE = 10'd562;
+    localparam LOW_VALUE = 10'd462;
+    reg [11:0] COUNT_MAX = 12'd139; //to support 20Hz, we need 12 digits
+    reg [11:0] sample_counter = 0;
+    reg wave_state = 0;
+    reg mode = 0; //0 = linear, 1 = exponential
+
 
     always @(posedge clk) begin
-        if (next_sample == 1'b1)
-            dac_next_sample_cnt <=  (dac_next_sample_cnt == high_low_switch_COUNT) ? 0:dac_next_sample_cnt + 1;
-        else
-            dac_next_sample_cnt <= dac_next_sample_cnt;
-        if (dac_next_sample_cnt == high_low_switch_COUNT)
-            code_state_r <= ~code_state_r;
-        else
-            code_state_r <= code_state_r;
-    end    
+        if (rst) begin
+            // todo: registers reset, wave freq to 440Hz
+            COUNT_MAX <= 139;
+            sample_counter <= 0;
+            wave_state <= 0;
+        end
+        else begin
+            if (buttons[2]) mode <= ~mode;
 
-    assign code = code_state_r == HIGH_S ? HIGH_CODE : LOW_CODE;
+            if (buttons[1]) begin
+                if (mode) COUNT_MAX <= (COUNT_MAX <= 1530) ? (COUNT_MAX << 1) : 6;
+                else COUNT_MAX <= (COUNT_MAX <= 3060 - STEP) ? (COUNT_MAX + STEP) : 6;
+            end else if (buttons[0]) begin
+                if (mode) COUNT_MAX <= (COUNT_MAX >= 10) ? (COUNT_MAX >> 1) : 3058;
+                else COUNT_MAX <= (COUNT_MAX >= 6 + STEP) ? (COUNT_MAX - STEP) : 3058;
+            end
+            else begin
+                COUNT_MAX <= COUNT_MAX;
+            end
+
+            if (next_sample) begin
+                if (sample_counter >= COUNT_MAX - 1) begin
+                    sample_counter <= 0;
+                    wave_state <= ~wave_state; 
+                end else begin
+                    sample_counter <= sample_counter + 1;
+                end
+            end
+            else begin
+                sample_counter <= sample_counter;
+            end
+
+            if (wave_state) begin
+                code <= HIGH_VALUE;
+            end else begin
+                code <= LOW_VALUE;
+            end
+
+        end
+    end
+
+    assign leds[0] = mode;
 endmodule
-
