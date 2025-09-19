@@ -4,7 +4,7 @@
 
 /* mem_controller_tb v2 */
 
-module mem_controller();
+module mem_controller_tb();
 
     localparam FIFO_WIDTH = 8;
     localparam FIFO_DEPTH = 8;

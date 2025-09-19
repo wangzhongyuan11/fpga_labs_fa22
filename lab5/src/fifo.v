@@ -12,7 +12,7 @@ module fifo #(
 
     // Read side
     input rd_en,
-    output [WIDTH-1:0] dout,
+    output reg [WIDTH-1:0] dout,
     output empty
 );
     reg [WIDTH-1:0] fifo_buffer[DEPTH - 1 : 0];
