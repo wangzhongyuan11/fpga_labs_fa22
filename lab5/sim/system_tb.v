@@ -149,6 +149,7 @@ module system_tb();
   endtask 
 
   initial begin
+    integer z;
 
     `ifndef IVERILOG
         $vcdpluson;
@@ -157,6 +158,7 @@ module system_tb();
     `ifdef IVERILOG
         $dumpfile("system_tb.fst");
         $dumpvars(0, system_tb);
+        
         for(z = 0; z < MEM_DEPTH; z = z + 1) begin
             // to show each entry of the 2D reg in your mem on the waveform
             $dumpvars(0, top.mem_ctrl.mem.mem[z]);
@@ -246,7 +248,7 @@ module system_tb();
   // end
   
   initial begin
-      repeat (`CYCLES_PER_CHAR * 500) @(posedge clk);
+      repeat (`CYCLES_PER_CHAR * 00) @(posedge clk);
       $error("Timing out");
       $fatal();
   end
