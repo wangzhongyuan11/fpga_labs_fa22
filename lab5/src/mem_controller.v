@@ -9,12 +9,12 @@ module mem_controller #(
 
   output reg rx_fifo_rd_en,
   output reg tx_fifo_wr_en,
-  output reg [FIFO_WIDTH-1:0] dout,
+  output reg[FIFO_WIDTH-1:0] dout,
   output [5:0] state_leds
 );
 
-  localparam MEM_WIDTH = 8;   /* Width of each mem entry (word) */
-  localparam MEM_DEPTH = 256; /* Number of entries */
+  localparam MEM_WIDTH = 8; // Width of each mem entry (word)
+  localparam MEM_DEPTH = 256; // Number of entries
   localparam NUM_BYTES_PER_WORD = MEM_WIDTH/8;
   localparam MEM_ADDR_WIDTH = $clog2(MEM_DEPTH); 
 
@@ -47,104 +47,139 @@ module mem_controller #(
   reg [2:0] curr_state;
   reg [2:0] next_state;
 
+  always @(posedge clk) begin
+    // State reg update
+    if (rst) curr_state <= IDLE;
+    else curr_state <= next_state;
+  end
 
-
+  reg [2:0] pkt_rd_cnt;
   reg [MEM_WIDTH-1:0] cmd;
   reg [MEM_WIDTH-1:0] addr;
   reg [MEM_WIDTH-1:0] data;
+  reg handshake;
 
-  reg rx_fifo_empty_r;
-  always @(posedge clk) begin
-    rx_fifo_empty_r <= rx_fifo_empty;
+
+  always @(*) begin
+    // Initial values to avoid latch synthesis
+    next_state = curr_state;
+
+    case (curr_state)
+      // Next state logic
+      IDLE: begin
+        if(!rx_fifo_empty) next_state = READ_CMD;
+      end
+
+      READ_CMD: begin
+        if(!rx_fifo_empty) next_state = READ_ADDR;
+      end
+
+      READ_ADDR: begin
+        if (cmd == 8'd49) begin
+          if(!rx_fifo_empty) begin 
+            next_state = READ_DATA;  //write command
+          end 
+        end else if (cmd == 8'd48)begin
+          next_state = READ_MEM_VAL; //read command
+        end
+      end
+
+      READ_DATA: begin
+          next_state = WRITE_MEM_VAL;
+      end
+
+      READ_MEM_VAL: begin
+        next_state = ECHO_VAL;
+      end
+
+      ECHO_VAL: begin
+        if (!tx_fifo_full) begin
+          next_state = IDLE;
+        end
+        
+      end
+
+      WRITE_MEM_VAL: begin
+        next_state = IDLE;
+      end
+    endcase
+
   end
 
   always @(*) begin
+    // Initial values to avoid latch synthesis
+    mem_we = 1'b0;           // Default: no memory write
+    rx_fifo_rd_en = 1'b0;     // Default: no FIFO read
+    tx_fifo_wr_en = 1'b0;     // Default: no FIFO write
+    mem_addr = addr;          // Set memory address from the address register
+    mem_din = data;           // Set memory data from the data register
+    dout = 0;
+
     case (curr_state)
-      /* next state logic */
-      IDLE:begin
-        if(~rx_fifo_empty) begin
-          next_state = READ_CMD;
+    // Output and mem signal logic
+      IDLE: begin
+        if (!rx_fifo_empty) rx_fifo_rd_en = 1'b1;
+      end
+
+      READ_CMD: begin
+        rx_fifo_rd_en = 1'b1;
+        //cmd = din;
+      end
+
+      READ_ADDR: begin
+        if(cmd == 8'd49) begin
           rx_fifo_rd_en = 1'b1;
-        end
-        else next_state = IDLE;
-        
-        tx_fifo_wr_en = 0;
-        mem_we = 0;
-      end
-      READ_CMD:begin
-        next_state = READ_ADDR;
-        if(rx_fifo_empty) rx_fifo_rd_en = 0;
-        else begin
-          rx_fifo_rd_en = 1;
-        end
-
-        cmd = din;
-      end
-      READ_ADDR:begin
-        if(~rx_fifo_empty_r && cmd == 8'd49) next_state = READ_DATA;
-        else if(cmd == 8'd48) begin
-          next_state = READ_MEM_VAL;
-          rx_fifo_rd_en = 0;
-          mem_addr = addr;
-        end
-        else next_state = READ_ADDR;
-        
-        if(rx_fifo_empty || cmd == 8'd48) rx_fifo_rd_en = 0;
-        else begin
-          rx_fifo_rd_en = 1;
-        end
-
-        addr = din;
-      end
-      READ_MEM_VAL:begin
-        next_state = ECHO_VAL;
-
-        rx_fifo_rd_en = 0;
-        data = mem_dout;
-      end
-      READ_DATA:begin
-        if(~rx_fifo_empty_r) next_state = WRITE_MEM_VAL;
-        if(rx_fifo_empty) rx_fifo_rd_en = 0;
-        else begin
-          rx_fifo_rd_en = 1;
-        end
-
-        data = din;
-      end
-      WRITE_MEM_VAL:begin
-        next_state = IDLE;
-
-        rx_fifo_rd_en = 1'b0;
+        end else rx_fifo_rd_en = 1'b0;
+        //addr = din;
         mem_addr = addr;
-        mem_din = data;
-        mem_we = 1'b1;
-      end
-      ECHO_VAL:begin
-        next_state = IDLE;
-
-        dout = data;
-        rx_fifo_rd_en = 0;
-        tx_fifo_wr_en = 1'b1;
       end
 
+      READ_DATA: begin
+        rx_fifo_rd_en = 1'b1;
+        //data = din;
+      end
+
+      READ_MEM_VAL: begin
+        rx_fifo_rd_en = 1'b0;
+        tx_fifo_wr_en = 1'b0;
+        
+      end
+
+      ECHO_VAL: begin
+        rx_fifo_rd_en = 1'b0;
+        tx_fifo_wr_en = 1'b1;   // Write the memory value to the tx_fifo
+        dout = mem_dout;        // Output data from memory to the FIFO
+      end
+
+      WRITE_MEM_VAL: begin
+        mem_we = 1'b1;      // Enable memory write
+        mem_addr = addr;    // Set memory address
+        mem_din = data;     // Set memory data from the data byte
+      end
     endcase
+
   end
+
 
 
   always @(posedge clk) begin
-    /* byte reading and packet counting */
-    if(rst) begin
-      next_state <= IDLE;
-      curr_state <= IDLE;
-      rx_fifo_rd_en <= 1'b0;
-      tx_fifo_wr_en <= 1'b0;
-    end
-    else begin
-      curr_state <= next_state;
-    end
-      
+    // Byte reading and packet counting
+      case (curr_state)
+        READ_CMD: begin
+          cmd <= din;               // Read the command byte from FIFO
+        end
+
+        READ_ADDR: begin
+          addr <= din;         // Read the address byte from FIFO
+        end
+
+        READ_DATA: begin
+          data <= din;               // Read the data byte from FIFO                  
+        end
+      endcase
   end
 
-  assign state_leds[5:0] = {3'b0, curr_state[2:0]};
+  // TODO: MODIFY THIS
+  assign state_leds = {2'b00, curr_state};
 
 endmodule

@@ -248,7 +248,7 @@ module system_tb();
   // end
   
   initial begin
-      repeat (`CYCLES_PER_CHAR * 00) @(posedge clk);
+      repeat (`CYCLES_PER_CHAR * 500) @(posedge clk);
       $error("Timing out");
       $fatal();
   end

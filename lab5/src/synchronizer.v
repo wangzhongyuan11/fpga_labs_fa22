@@ -8,7 +8,12 @@ module synchronizer #(parameter WIDTH = 1) (
     // (from different clock domain or not clocked, such as button press) signals
     // and should output a vector of WIDTH-bit synchronous signals
     // that are synchronized to the input clk
+    reg [WIDTH-1:0] async_signal_tmp1 = 0;
+    reg [WIDTH-1:0] async_signal_tmp2 = 0;
+    always @(posedge clk) begin
+        async_signal_tmp1 <= async_signal;
+        async_signal_tmp2 <= async_signal_tmp1;
+    end
+    assign sync_signal = async_signal_tmp2;
 
-    // Remove this line once you create your synchronizer
-    assign sync_signal = 0;
 endmodule
