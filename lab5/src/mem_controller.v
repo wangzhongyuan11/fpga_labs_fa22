@@ -131,18 +131,19 @@ module mem_controller #(
           rx_fifo_rd_en = 1'b1;
         end else rx_fifo_rd_en = 1'b0;
         //addr = din;
-        mem_addr = addr;
+        
       end
 
       READ_DATA: begin
-        rx_fifo_rd_en = 1'b1;
+        mem_addr = addr;
+        //rx_fifo_rd_en = 1'b0;
         //data = din;
       end
 
       READ_MEM_VAL: begin
         rx_fifo_rd_en = 1'b0;
         tx_fifo_wr_en = 1'b0;
-        
+        dout = mem_dout;
       end
 
       ECHO_VAL: begin
